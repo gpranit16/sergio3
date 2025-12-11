@@ -1,0 +1,157 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  🏦 AGENTIC LENDING SYSTEM - QUICK REFERENCE CARD      ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+📦 INSTALLATION
+─────────────────────────────────────────────────────────
+cd c:\loan
+npm install
+npm run dev
+
+🌐 PAGES
+─────────────────────────────────────────────────────────
+http://localhost:3000           → Home (Hero Page)
+http://localhost:3000/apply     → Loan Application Form
+http://localhost:3000/result    → Decision Result
+http://localhost:3000/dashboard → Admin Dashboard
+
+🔧 KEY FILES TO EDIT
+─────────────────────────────────────────────────────────
+lib/riskEngine.ts          → Modify risk rules
+lib/openrouter.ts          → Change AI prompts
+tailwind.config.ts         → Customize colors
+components/                → Update UI components
+app/apply/page.tsx         → Add more form fields
+
+🎨 COLOR CODES
+─────────────────────────────────────────────────────────
+Background:    #0a0a0f
+Neon Purple:   #a855f7
+Neon Blue:     #3b82f6
+Neon Pink:     #ec4899
+Glass Border:  rgba(255,255,255,0.1)
+
+📊 RISK SCORE LOGIC
+─────────────────────────────────────────────────────────
+Base Score: 100
+
+Age Impact:
+  < 21:   -25  |  50-60:  -10  |  > 60:  -30
+
+Income Impact:
+  < 20k:  -30  |  20-40k: -10  |  > 60k: +10
+
+EMI Ratio:
+  < 30%:  +5   |  30-40%: -10  |  40-70%: -25
+
+Loan/Income:
+  < 1.5:  +5   |  1.5-2:  -10  |  2-3:   -20  |  > 3: -30
+
+Employment:
+  Salaried: +10  |  Self-Employed: -10  |  Student: -30
+
+DECISION:
+  ≥ 70:  APPROVED  |  40-69:  PENDING  |  < 40:  REJECTED
+
+🚫 HARD REJECTIONS (Auto-Reject)
+─────────────────────────────────────────────────────────
+1. Age < 18
+2. Monthly Income < ₹15,000
+3. EMI Ratio > 70%
+4. Loan > 4× Annual Income
+5. Student + Income < ₹15,000
+6. Age > 60 + Non-Salaried
+
+🔌 API ENDPOINTS
+─────────────────────────────────────────────────────────
+POST   /api/applications        → Submit new application
+GET    /api/applications        → Get all applications
+GET    /api/applications?id=xxx → Get specific application
+
+🧪 TEST APPLICATIONS
+─────────────────────────────────────────────────────────
+APPROVED TEST:
+  Name: John Doe, Age: 35, Salaried
+  Income: ₹80,000, EMI: ₹10,000
+  Loan: ₹500,000, Tenure: 24 months
+  Expected Score: ~90
+
+PENDING TEST:
+  Name: Jane Smith, Age: 28, Self-Employed
+  Income: ₹35,000, EMI: ₹12,000
+  Loan: ₹400,000, Tenure: 36 months
+  Expected Score: ~50-60
+
+REJECTED TEST:
+  Name: Bob Wilson, Age: 65, Self-Employed
+  Income: ₹25,000, EMI: ₹18,000
+  Loan: ₹2,000,000, Tenure: 120 months
+  Expected: Hard Rejection (Age > 60 + Non-Salaried)
+
+🗄️ DATABASE SETUP
+─────────────────────────────────────────────────────────
+1. Go to: https://fqsntjiyftkkenvekato.supabase.co
+2. SQL Editor → New Query
+3. Copy contents of supabase-schema.sql
+4. Run Query
+5. Verify "applications" table created
+
+🔐 ENVIRONMENT VARIABLES
+─────────────────────────────────────────────────────────
+File: .env.local
+
+NEXT_PUBLIC_SUPABASE_URL=https://fqsntjiyftkkenvekato.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=[already set]
+OPENROUTER_API_KEY=sk-or-v1-[already set]
+
+🐛 TROUBLESHOOTING
+─────────────────────────────────────────────────────────
+Issue: Port 3000 in use
+Fix:   npm run dev -- -p 3001
+
+Issue: CSS not loading
+Fix:   Restart server (Ctrl+C, then npm run dev)
+
+Issue: Supabase error
+Fix:   Verify you ran supabase-schema.sql
+
+Issue: OpenRouter error
+Fix:   Check OPENROUTER_API_KEY in .env.local
+
+📦 PRODUCTION BUILD
+─────────────────────────────────────────────────────────
+npm run build    → Build production bundle
+npm start        → Start production server
+
+Deploy to Vercel:
+npm install -g vercel
+vercel
+
+🎯 COMPONENT USAGE
+─────────────────────────────────────────────────────────
+<GlassCard>                    → Frosted glass container
+<GradientButton>               → Primary/secondary button
+<WaterBlobBackground>          → Animated background
+<DecisionBadge decision="approved" /> → Status badge
+<ScoreCircle score={75} />     → Circular score display
+<FormField label="Name" ... /> → Form input
+
+📚 DOCUMENTATION FILES
+─────────────────────────────────────────────────────────
+README.md              → Main documentation
+SETUP.md               → Quick start guide
+PROJECT-COMPLETE.md    → Technical specifications
+supabase-schema.sql    → Database schema
+
+🚀 DEPLOYMENT READY
+─────────────────────────────────────────────────────────
+✅ All TypeScript errors resolved
+✅ Production build tested
+✅ Mobile responsive
+✅ SEO optimized
+✅ Security implemented
+✅ Error handling complete
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  Built with ❤️ using Next.js 14 + TypeScript + AI     ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛

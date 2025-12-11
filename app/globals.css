@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #0a0a14;
+    color: #ffffff;
+  }
+
+  /* Money Heist themed scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(220, 38, 38, 0.1);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+  }
+
+  /* Selection color */
+  ::selection {
+    background: rgba(220, 38, 38, 0.3);
+    color: #ffffff;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Glassmorphism utility - Money Heist style */
+  .glass {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(220, 38, 38, 0.2);
+  }
+
+  .glass-dark {
+    background: rgba(10, 10, 20, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Neon glow effects - Red theme */
+  .neon-glow {
+    text-shadow: 0 0 10px currentColor,
+                 0 0 20px currentColor,
+                 0 0 30px currentColor;
+  }
+
+  .neon-glow-red {
+    text-shadow: 0 0 10px #dc2626,
+                 0 0 20px #dc2626,
+                 0 0 40px #dc2626;
+  }
+
+  .neon-glow-gold {
+    text-shadow: 0 0 10px #fbbf24,
+                 0 0 20px #fbbf24,
+                 0 0 40px #fbbf24;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-red-500 via-amber-500 to-red-500;
+  }
+
+  .gradient-text-heist {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-red-600 via-red-400 to-amber-500;
+  }
+
+  /* Box shadows - Money Heist style */
+  .shadow-heist {
+    box-shadow: 0 0 30px rgba(220, 38, 38, 0.3),
+                0 0 60px rgba(220, 38, 38, 0.1);
+  }
+
+  .shadow-gold {
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.3),
+                0 0 60px rgba(251, 191, 36, 0.1);
+  }
+
+  /* Animation utilities */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse-glow-red {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(220, 38, 38, 0.8);
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(220, 38, 38, 0.1),
+      transparent
+    );
+    background-size: 200% 100%;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  /* Breathing animation */
+  .animate-breathe {
+    animation: breathe 4s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.8;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 1;
+    }
+  }
+
+  /* Scan line effect */
+  .scan-lines {
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(220, 38, 38, 0.03) 2px,
+      rgba(220, 38, 38, 0.03) 4px
+    );
+    pointer-events: none;
+  }
+}
+
+/* Framer Motion page transitions */
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.page-exit {
+  opacity: 1;
+}
+
+.page-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
