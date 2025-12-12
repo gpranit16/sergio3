@@ -412,6 +412,8 @@ export default function SmartIntakePage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [applicationData, setApplicationData] = useState<ApplicationData>({});
   const [showDocumentUpload, setShowDocumentUpload] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [recognition, setRecognition] = useState<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -421,6 +423,39 @@ export default function SmartIntakePage() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Initialize speech recognition
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        const recognitionInstance = new SpeechRecognition();
+        recognitionInstance.continuous = false;
+        recognitionInstance.interimResults = false;
+        recognitionInstance.lang = 'en-US';
+
+        recognitionInstance.onresult = (event: any) => {
+          const transcript = event.results[0][0].transcript;
+          setUserInput(transcript);
+          setIsListening(false);
+        };
+
+        recognitionInstance.onerror = (event: any) => {
+          console.error('Speech recognition error:', event.error);
+          setIsListening(false);
+          if (event.error === 'not-allowed') {
+            addMessage('bot', '🎤 Microphone access denied. Please allow microphone access in your browser settings.');
+          }
+        };
+
+        recognitionInstance.onend = () => {
+          setIsListening(false);
+        };
+
+        setRecognition(recognitionInstance);
+      }
+    }
+  }, []);
 
   const startChat = () => {
     setShowChat(true);
@@ -513,6 +548,21 @@ export default function SmartIntakePage() {
     if (applicationData.tenure_months) params.set('tenure_months', applicationData.tenure_months.toString());
     
     router.push(`/apply-loan?${params.toString()}`);
+  };
+
+  const toggleVoiceInput = () => {
+    if (!recognition) {
+      addMessage('bot', '🎤 Voice input is not supported in your browser. Please use Chrome, Edge, or Safari.');
+      return;
+    }
+
+    if (isListening) {
+      recognition.stop();
+      setIsListening(false);
+    } else {
+      setIsListening(true);
+      recognition.start();
+    }
   };
 
   return (
@@ -841,10 +891,24 @@ export default function SmartIntakePage() {
                     value={userInput}
                     onChange={(e) => setUserInput(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    placeholder="Type your message... (Press Enter to send)"
-                    disabled={isProcessing}
+                    placeholder={isListening ? "Listening..." : "Type your message... (Press Enter to send)"}
+                    disabled={isProcessing || isListening}
                     className="flex-1 px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-red-500/50 transition-all disabled:opacity-50"
                   />
+                  <motion.button
+                    onClick={toggleVoiceInput}
+                    disabled={isProcessing}
+                    className={`px-6 py-4 rounded-xl font-bold transition-all ${
+                      isListening 
+                        ? 'bg-gradient-to-r from-green-600 to-green-700 text-white animate-pulse' 
+                        : 'bg-white/5 border border-white/10 text-gray-300 hover:border-red-500/50 hover:text-red-400'
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    title={isListening ? "Stop listening" : "Start voice input"}
+                  >
+                    {isListening ? '🎤' : '🎙️'}
+                  </motion.button>
                   <motion.button
                     onClick={handleSendMessage}
                     disabled={isProcessing || !userInput.trim()}
@@ -856,7 +920,7 @@ export default function SmartIntakePage() {
                   </motion.button>
                 </div>
                 <p className="text-center text-gray-600 text-xs mt-2">
-                  🔒 End-to-end encrypted • Your data is safe with El Profesor
+                  🔒 End-to-end encrypted • Your data is safe with El Profesor {isListening && '• 🎤 Listening...'}
                 </p>
               </div>
             </div>
