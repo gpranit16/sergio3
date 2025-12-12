@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface FormData {
   name: string;
@@ -97,6 +97,7 @@ interface SalarySlipVerificationResult {
 
 export default function ApplyLoanPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -145,6 +146,41 @@ export default function ApplyLoanPage() {
     bank_statement: null,
     selfie: null,
   });
+
+  // Check for pre-filled data from smart-intake and auto-fill form
+  useEffect(() => {
+    const name = searchParams.get('name');
+    const age = searchParams.get('age');
+    const phone = searchParams.get('phone');
+    const email = searchParams.get('email');
+    const employment_type = searchParams.get('employment_type');
+    const monthly_income = searchParams.get('monthly_income');
+    const existing_emi = searchParams.get('existing_emi');
+    const loan_amount = searchParams.get('loan_amount');
+    const tenure_months = searchParams.get('tenure_months');
+
+    // If we have data from smart-intake, pre-fill the form
+    if (name || age || phone || email) {
+      const preFilledData: FormData = {
+        name: name || '',
+        age: age || '',
+        phone: phone || '',
+        email: email || '',
+        employment_type: employment_type || '',
+        monthly_income: monthly_income || '',
+        existing_emi: existing_emi || '0',
+        loan_amount: loan_amount || '',
+        tenure_months: tenure_months || '',
+      };
+      
+      setFormData(preFilledData);
+      
+      // Automatically move to step 2 (document upload) after a brief delay
+      setTimeout(() => {
+        setStep(2);
+      }, 500);
+    }
+  }, [searchParams]);
 
   const validateStep1 = () => {
     const newErrors: Record<string, string> = {};

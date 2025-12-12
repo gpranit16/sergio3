@@ -20,6 +20,7 @@ export default function Navbar() {
 
   const navItems = [
     { name: 'Home', href: '/', icon: '🏠' },
+    { name: 'Smart Intake', href: '/smart-intake', icon: '🤖', special: true },
     { name: 'Apply', href: '/apply-loan', icon: '📝' },
     { name: 'About', href: '/about', icon: 'ℹ️' },
     { name: 'How It Works', href: '/how-it-works', icon: '⚙️' },
@@ -86,9 +87,11 @@ export default function Navbar() {
                   className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     pathname === item.href
                       ? 'text-red-400'
-                      : item.name === 'Support'
-                        ? 'text-amber-400 hover:text-amber-300'
-                        : 'text-gray-300 hover:text-white'
+                      : item.special
+                        ? 'text-purple-400 hover:text-purple-300'
+                        : item.name === 'Support'
+                          ? 'text-amber-400 hover:text-amber-300'
+                          : 'text-gray-300 hover:text-white'
                   }`}
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
@@ -102,6 +105,14 @@ export default function Navbar() {
                       layoutId="activeTab"
                       className="absolute inset-0 bg-red-500/20 rounded-lg border border-red-500/30"
                       transition={{ type: 'spring', bounce: 0.3, duration: 0.6 }}
+                    />
+                  )}
+                  
+                  {/* Special glow for Smart Intake */}
+                  {item.special && (
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-lg opacity-0 hover:opacity-100"
+                      whileHover={{ opacity: 1 }}
                     />
                   )}
                   

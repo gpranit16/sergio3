@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 interface Message {
   id: string;
@@ -404,6 +405,7 @@ const RobotAgent = ({ isTyping, isActive }: { isTyping: boolean; isActive: boole
 };
 
 export default function SmartIntakePage() {
+  const router = useRouter();
   const [showChat, setShowChat] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [userInput, setUserInput] = useState('');
@@ -495,6 +497,22 @@ export default function SmartIntakePage() {
       e.preventDefault();
       handleSendMessage();
     }
+  };
+
+  const handleProceedToApplication = () => {
+    // Build URL with all collected application data
+    const params = new URLSearchParams();
+    if (applicationData.name) params.set('name', applicationData.name);
+    if (applicationData.age) params.set('age', applicationData.age.toString());
+    if (applicationData.phone) params.set('phone', applicationData.phone);
+    if (applicationData.email) params.set('email', applicationData.email);
+    if (applicationData.employment_type) params.set('employment_type', applicationData.employment_type);
+    if (applicationData.monthly_income) params.set('monthly_income', applicationData.monthly_income.toString());
+    if (applicationData.existing_emi) params.set('existing_emi', applicationData.existing_emi.toString());
+    if (applicationData.loan_amount) params.set('loan_amount', applicationData.loan_amount.toString());
+    if (applicationData.tenure_months) params.set('tenure_months', applicationData.tenure_months.toString());
+    
+    router.push(`/apply-loan?${params.toString()}`);
   };
 
   return (
@@ -788,7 +806,7 @@ export default function SmartIntakePage() {
                     className="px-6 py-4 bg-red-900/20 border-t border-red-900/30"
                   >
                     <h4 className="text-white font-bold mb-3">📄 Upload Documents</h4>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
                       {['Aadhaar', 'PAN Card', 'Salary Slip', 'Selfie'].map((doc) => (
                         <motion.button
                           key={doc}
@@ -801,6 +819,16 @@ export default function SmartIntakePage() {
                         </motion.button>
                       ))}
                     </div>
+                    
+                    {/* Proceed to Application Button */}
+                    <motion.button
+                      onClick={handleProceedToApplication}
+                      className="w-full px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white font-bold text-lg rounded-xl shadow-lg shadow-red-500/30 hover:shadow-red-500/50 transition-all border-2 border-red-500/50"
+                      whileHover={{ scale: 1.02, boxShadow: '0 0 30px rgba(220, 38, 38, 0.5)' }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      🎯 Continue to Application Form →
+                    </motion.button>
                   </motion.div>
                 )}
               </AnimatePresence>
