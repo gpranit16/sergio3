@@ -170,8 +170,8 @@ export default function AdminViewPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          applicationId: application.id,
-          newDecision,
+          application_id: application.id,
+          new_decision: newDecision,
           reason
         })
       });
@@ -755,6 +755,39 @@ export default function AdminViewPage() {
                               alt={doc.document_type}
                               className="w-full h-full object-cover"
                             />
+                          </div>
+                        )}
+                        
+                        {/* Extracted Data Section */}
+                        {doc.extracted_data && (
+                          <div className="mt-3 bg-black/70 rounded-lg p-3 border border-yellow-600/30">
+                            <h4 className="text-yellow-400 text-xs font-bold mb-2 flex items-center gap-1">
+                              <span>📋</span> EXTRACTED DATA
+                            </h4>
+                            <div className="space-y-1">
+                              {Object.entries(doc.extracted_data).map(([key, value]) => (
+                                <div key={key} className="flex justify-between text-xs">
+                                  <span className="text-gray-400 capitalize">{key.replace(/_/g, ' ')}:</span>
+                                  <span className="text-white font-medium truncate ml-2">
+                                    {typeof value === 'object' ? JSON.stringify(value) : String(value)}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Verification Details */}
+                        {doc.verification_details && (
+                          <div className="mt-2 text-xs">
+                            <details className="bg-black/50 rounded-lg border border-blue-600/30">
+                              <summary className="cursor-pointer p-2 text-blue-400 font-bold hover:bg-blue-500/10">
+                                🔍 Verification Details
+                              </summary>
+                              <pre className="p-2 text-gray-300 text-[10px] overflow-auto max-h-32">
+                                {JSON.stringify(doc.verification_details, null, 2)}
+                              </pre>
+                            </details>
                           </div>
                         )}
                       </motion.div>
